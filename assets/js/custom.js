@@ -28,14 +28,29 @@
       return;
     }
 
+    const lname = document.getElementById('f-lname').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const message = document.getElementById('f-message').value.trim();
+
+    // Send email via Formspree
+    const formData = new FormData();
+    formData.append('First Name', fname);
+    formData.append('Last Name', lname);
+    formData.append('Email', email);
+    formData.append('Phone', phone);
+    formData.append('Collection', collection);
+    formData.append('Message', message);
+
+    fetch('https://formspree.io/f/xaqalgoj', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+
     document.getElementById('enquiry-form-wrap').style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
-
-    // Build mailto
-    const msg = document.getElementById('f-message').value;
-    const subject = encodeURIComponent(`Enquiry from ${fname} – ${collection}`);
-    const body = encodeURIComponent(`Name: ${fname} ${document.getElementById('f-lname').value}\nEmail: ${email}\nPhone: ${document.getElementById('f-phone').value}\nCollection: ${collection}\n\nMessage:\n${msg}`);
-    setTimeout(() => {
-      window.location.href = `mailto:hello@maisongarments.com?subject=${subject}&body=${body}`;
-    }, 800);
   }
